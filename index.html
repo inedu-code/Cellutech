@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CelluTech – AI Bio-Composite Sourcing & Material Lifecycle Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #0a1628;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, #15803d, #166534);
+            color: #fff;
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 40px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(21, 128, 61, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(21, 128, 61, 0.5);
+        }
+        .btn-secondary {
+            display: inline-block;
+            background: transparent;
+            color: #15803d;
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 40px;
+            border: 2px solid #15803d;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(21, 128, 61, 0.06);
+        }
+        .btn-outline-light {
+            display: inline-block;
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-light:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: #4ade80;
+        }
+        .btn-sm {
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid #d1d9e6;
+            background: #fff;
+            color: #475569;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .btn-sm:hover {
+            border-color: #15803d;
+            color: #15803d;
+        }
+        .btn-sm.active {
+            background: #15803d;
+            color: #fff;
+            border-color: #15803d;
+        }
+
+        /* ---------- HEADER / NAV ---------- */
+        header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(21, 128, 61, 0.08);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
+            padding: 10px 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0a1628;
+        }
+        .logo span {
+            color: #15803d;
+        }
+        .logo .cell-icon {
+            display: inline-block;
+            margin-right: 4px;
+            color: #15803d;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+            font-weight: 500;
+            color: #475569;
+        }
+        .nav-links a {
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #15803d;
+        }
+        .nav-links .btn-primary {
+            padding: 8px 22px;
+            font-size: 0.85rem;
+        }
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #0a1628;
+        }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            padding: 150px 0 80px;
+            background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 40%, #ffffff 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '🌿';
+            position: absolute;
+            top: -5%;
+            right: -3%;
+            font-size: 20rem;
+            opacity: 0.04;
+            transform: rotate(10deg);
+        }
+        .hero .container {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(21, 128, 61, 0.10);
+            color: #15803d;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(21, 128, 61, 0.12);
+        }
+        .hero-badge i {
+            margin-right: 8px;
+        }
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.12;
+            color: #0a1628;
+            max-width: 900px;
+            margin: 0 auto 20px;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #15803d, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: #475569;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .hero-stats {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 30px 40px;
+            border: 1px solid rgba(21, 128, 61, 0.08);
+        }
+        .hero-stats .stat-item {
+            text-align: center;
+        }
+        .hero-stats .stat-item .number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #15803d;
+        }
+        .hero-stats .stat-item .label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* ---------- SECTIONS GENERAL ---------- */
+        section {
+            padding: 80px 0;
+        }
+        .section-title {
+            font-size: 2.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #0a1628;
+        }
+        .section-title .highlight {
+            background: linear-gradient(135deg, #15803d, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-sub {
+            text-align: center;
+            color: #64748b;
+            max-width: 720px;
+            margin: 0 auto 50px;
+            font-size: 1.2rem;
+        }
+        .section-light {
+            background: #ffffff;
+        }
+        .section-green {
+            background: #f0fdf4;
+        }
+
+        /* ---------- WHAT WE DO ---------- */
+        .what-we-do {
+            background: #ffffff;
+        }
+        .wwd-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .wwd-grid .text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            color: #0a1628;
+        }
+        .wwd-grid .text p {
+            color: #475569;
+            margin-bottom: 16px;
+        }
+        .wwd-grid .visual {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(21, 128, 61, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .wwd-grid .visual .leaf-bg {
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.04;
+            right: -20px;
+            bottom: -30px;
+            transform: rotate(-10deg);
+        }
+        .wwd-grid .visual i {
+            font-size: 4rem;
+            color: #15803d;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        .wwd-grid .visual p {
+            color: #475569;
+            position: relative;
+            z-index: 2;
+        }
+        .wwd-grid .visual .highlight-text {
+            color: #15803d;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------- PLATFORM (AI FEATURES) ---------- */
+        .platform {
+            background: #f0fdf4;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: #ffffff;
+            padding: 32px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+            transition: 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #15803d, #4ade80);
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(21, 128, 61, 0.08);
+            border-color: rgba(21, 128, 61, 0.12);
+        }
+        .feature-card .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: #f0fdf4;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .feature-card .icon-wrapper i {
+            font-size: 1.8rem;
+            color: #15803d;
+        }
+        .feature-card h4 {
+            font-size: 1.2rem;
+            color: #0a1628;
+            margin-bottom: 10px;
+        }
+        .feature-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        .feature-card .tag {
+            display: inline-block;
+            background: #f0fdf4;
+            color: #15803d;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* ---------- MATERIAL MATCHING SIMULATOR ---------- */
+        .matcher {
+            background: #ffffff;
+            padding: 60px 0;
+        }
+        .matcher .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+        .matcher .matcher-main {
+            background: #f0fdf4;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+        }
+        .matcher .matcher-main .matcher-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .matcher .matcher-main .matcher-header .status-text i {
+            color: #22c55e;
+            margin-right: 8px;
+        }
+        .matcher .matcher-main .search-panel {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+            margin-bottom: 16px;
+        }
+        .matcher .matcher-main .search-panel .search-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .matcher .matcher-main .search-panel .search-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .matcher .matcher-main .search-panel .search-input input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #d1d9e6;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: #fff;
+            color: #0a1628;
+            transition: 0.2s;
+        }
+        .matcher .matcher-main .search-panel .search-input input:focus {
+            border-color: #15803d;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.08);
+        }
+        .matcher .matcher-main .search-panel .search-input button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            background: #15803d;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .matcher .matcher-main .search-panel .search-input button:hover {
+            background: #166534;
+        }
+        .matcher .matcher-main .search-panel .material-suggestions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .matcher .matcher-main .search-panel .material-suggestions .suggestion {
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #f0fdf4;
+            color: #15803d;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid rgba(21, 128, 61, 0.1);
+            transition: 0.2s;
+        }
+        .matcher .matcher-main .search-panel .material-suggestions .suggestion:hover {
+            background: #dcfce7;
+        }
+        .matcher .matcher-main .results-panel {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+        }
+        .matcher .matcher-main .results-panel .results-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .matcher .matcher-main .results-panel .result-item {
+            display: grid;
+            grid-template-columns: 1fr 100px 100px 80px;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .matcher .matcher-main .results-panel .result-item:last-child {
+            border-bottom: none;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-name {
+            font-weight: 600;
+            color: #0a1628;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-name .result-sub {
+            display: block;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-match {
+            text-align: center;
+            font-weight: 700;
+            color: #15803d;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-match .match-bar {
+            display: block;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-match .match-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #15803d, #4ade80);
+            border-radius: 2px;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-cost {
+            text-align: center;
+            color: #475569;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-action {
+            text-align: center;
+        }
+        .matcher .matcher-main .results-panel .result-item .result-action .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+        .matcher .matcher-sidebar {
+            background: #f0fdf4;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+        }
+        .matcher .matcher-sidebar h4 {
+            color: #0a1628;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+        .matcher .matcher-sidebar .metric-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(21, 128, 61, 0.06);
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        .matcher .matcher-sidebar .metric-item:last-child {
+            border-bottom: none;
+        }
+        .matcher .matcher-sidebar .metric-item .value {
+            font-weight: 700;
+        }
+        .matcher .matcher-sidebar .metric-item .value.good { color: #22c55e; }
+        .matcher .matcher-sidebar .metric-item .value.warning { color: #f59e0b; }
+        .matcher .matcher-sidebar .metric-item .value.danger { color: #ef4444; }
+        .matcher .matcher-sidebar .source-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(21, 128, 61, 0.06);
+            color: #475569;
+            font-size: 0.85rem;
+        }
+        .matcher .matcher-sidebar .source-item:last-child {
+            border-bottom: none;
+        }
+        .matcher .matcher-sidebar .source-item .source-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            background: #dcfce7;
+            color: #15803d;
+        }
+        .matcher .matcher-sidebar .sustainability-bar {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+        }
+        .matcher .matcher-sidebar .sustainability-bar .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .matcher .matcher-sidebar .sustainability-bar .bar-track {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .matcher .matcher-sidebar .sustainability-bar .bar-track .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #15803d, #4ade80);
+            border-radius: 4px;
+            transition: width 1s ease;
+            width: 78%;
+        }
+
+        /* ---------- WHY CELLUTECH ---------- */
+        .why {
+            background: #f0fdf4;
+        }
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .why-grid .why-item {
+            padding: 30px 20px;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+            transition: 0.3s;
+        }
+        .why-grid .why-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(21, 128, 61, 0.06);
+        }
+        .why-grid .why-item .number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #15803d;
+        }
+        .why-grid .why-item p {
+            color: #475569;
+            font-weight: 500;
+        }
+
+        /* ---------- WHO WE SERVE ---------- */
+        .serve {
+            background: #ffffff;
+        }
+        .serve-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+        .serve-card {
+            background: #f0fdf4;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(21, 128, 61, 0.04);
+            transition: 0.3s;
+        }
+        .serve-card:hover {
+            border-color: rgba(21, 128, 61, 0.12);
+            transform: translateY(-4px);
+        }
+        .serve-card i {
+            font-size: 2.6rem;
+            color: #15803d;
+            margin-bottom: 12px;
+        }
+        .serve-card h4 {
+            font-size: 1.2rem;
+            color: #0a1628;
+        }
+        .serve-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* ---------- TESTIMONIALS ---------- */
+        .testimonials {
+            background: #f0fdf4;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .testimonial-card {
+            background: #ffffff;
+            padding: 28px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(21, 128, 61, 0.06);
+        }
+        .testimonial-card .quote {
+            font-size: 1rem;
+            color: #334155;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .testimonial-card .author {
+            font-weight: 600;
+            color: #0a1628;
+        }
+        .testimonial-card .role {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .testimonial-card .stars {
+            color: #f59e0b;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        /* ---------- TEAM ---------- */
+        .team {
+            background: #ffffff;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 35px;
+        }
+        .team-card {
+            text-align: center;
+            background: #f0fdf4;
+            padding: 28px 20px 24px;
+            border-radius: 24px;
+            transition: 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .team-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(21, 128, 61, 0.12);
+            box-shadow: 0 20px 40px rgba(21, 128, 61, 0.06);
+        }
+        .team-card .avatar-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            margin-bottom: 14px;
+        }
+        .team-card h4 {
+            font-size: 1.1rem;
+            color: #0a1628;
+            margin-bottom: 2px;
+        }
+        .team-card .title {
+            color: #15803d;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .team-card .bio {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin: 8px 0 12px;
+        }
+        .team-card .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .team-card .social-icons a {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+        .team-card .social-icons a:hover {
+            color: #15803d;
+        }
+
+        /* ---------- CONTACT ---------- */
+        .contact {
+            background: #f0fdf4;
+        }
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #d1d9e6;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            background: #ffffff;
+            color: #0a1628;
+            transition: 0.2s;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            border-color: #15803d;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.08);
+        }
+        .contact-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .contact-form select option {
+            background: #ffffff;
+        }
+        .contact-info p {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #475569;
+        }
+        .contact-info i {
+            width: 24px;
+            color: #15803d;
+        }
+        .contact-info .emergency-box {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #15803d;
+            margin-top: 20px;
+        }
+        .contact-info .emergency-box h4 {
+            color: #15803d;
+        }
+
+        /* ---------- GET STARTED ---------- */
+        .get-started {
+            background: linear-gradient(135deg, #0a1628, #14532d);
+            color: #fff;
+            text-align: center;
+        }
+        .get-started h2 {
+            font-size: 2.6rem;
+        }
+        .get-started h2 .highlight {
+            background: linear-gradient(135deg, #4ade80, #15803d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .get-started p {
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 16px auto 32px;
+        }
+        .get-started .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0 30px;
+        }
+        .get-started .steps .step {
+            flex: 1 1 180px;
+        }
+        .get-started .steps .step .num {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #4ade80;
+        }
+        .get-started .steps .step h4 {
+            color: #fff;
+        }
+        .get-started .steps .step p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            background: #060e14;
+            color: #94a3b8;
+            padding: 40px 0 20px;
+            border-top: 1px solid rgba(21, 128, 61, 0.06);
+        }
+        footer .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        footer .footer-grid h4 {
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        footer .footer-grid a {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        footer .footer-grid a:hover {
+            color: #4ade80;
+        }
+        footer .bottom {
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+        }
+        footer .social i {
+            font-size: 1.4rem;
+            margin-left: 16px;
+            transition: 0.2s;
+        }
+        footer .social i:hover {
+            color: #4ade80;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .matcher .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.6rem; }
+            .wwd-grid { grid-template-columns: 1fr; }
+            .contact-wrap { grid-template-columns: 1fr; }
+            footer .footer-grid { grid-template-columns: 1fr 1fr; }
+            .matcher .matcher-main .results-panel .result-item {
+                grid-template-columns: 1fr 80px 80px 60px;
+                font-size: 0.75rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                padding: 30px 24px;
+                gap: 18px;
+                border-bottom: 1px solid rgba(21, 128, 61, 0.08);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .hamburger {
+                display: block;
+            }
+            .hero {
+                padding: 120px 0 60px;
+            }
+            .hero h1 { font-size: 2rem; }
+            .hero-stats {
+                gap: 30px;
+                padding: 20px;
+            }
+            .why-grid { grid-template-columns: 1fr 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            footer .footer-grid { grid-template-columns: 1fr; }
+            .matcher .matcher-main .results-panel .result-item {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                text-align: center;
+            }
+            .matcher .matcher-main .search-panel .search-input {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <nav class="container">
+            <div class="logo"><span class="cell-icon">🌿</span>Cellu<span>Tech</span></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#what">What We Do</a></li>
+                <li><a href="#platform">Platform</a></li>
+                <li><a href="#why">Why CelluTech</a></li>
+                <li><a href="#serve">Who We Serve</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#getstarted" class="btn-primary">Get Started</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-badge"><i class="fas fa-recycle"></i> AI Material Matching • Sustainable Sourcing • Lifecycle Tracking</div>
+            <h1>Replace Synthetics with <span class="highlight">Sustainable Bio-Composites</span></h1>
+            <p>AI-powered matching that connects product designers with eco-friendly alternatives — substituting harmful synthetics with agricultural waste fibers and plant-based composites.</p>
+            <div class="hero-buttons">
+                <a href="#getstarted" class="btn-primary"><i class="fas fa-leaf"></i> Start Free Trial</a>
+                <a href="#platform" class="btn-secondary">Explore the Platform</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="number">12K+</div>
+                    <div class="label">Bio-Composite Materials</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">94%</div>
+                    <div class="label">Match Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">8.4K</div>
+                    <div class="label">Products Redesigned</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHAT WE DO ===== -->
+    <section id="what" class="what-we-do">
+        <div class="container">
+            <div class="wwd-grid">
+                <div class="text">
+                    <h3>From <span style="color:#15803d;">Harmful Synthetics</span> to Sustainable Bio-Composites</h3>
+                    <p><strong>The Challenge:</strong> Product designers want to switch to sustainable materials but lack the data to know which bio-composites will perform comparably to synthetics — or where to source them at scale.</p>
+                    <p><strong>The CelluTech Solution:</strong> Our AI analyzes your product's <strong>entire lifecycle — from material properties to end-of-life disposal</strong>. It then matches you with the optimal <strong>bio-composite alternatives</strong>, sourced from agricultural waste fibers (hemp, flax, rice husk, coconut coir) and plant-based polymers (PLA, PHA, starch blends). You get performance data, sustainability metrics, and verified supplier connections — all in one platform.</p>
+                    <p style="font-weight:600; color:#15803d;">✅ 12K+ Materials • ✅ 94% Match Accuracy • ✅ Lifecycle Tracking</p>
+                </div>
+                <div class="visual">
+                    <div class="leaf-bg">🌾</div>
+                    <i class="fas fa-seedling"></i>
+                    <p style="font-size:1.2rem; font-weight:600; color:#0a1628;">AI Bio-Composite Matching</p>
+                    <p><span class="highlight-text">🔍 Product Analysis</span> → <span class="highlight-text">⚡ AI Matching</span> → <span class="highlight-text">🌿 Sustainable Material</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PLATFORM (AI FEATURES) ===== -->
+    <section id="platform" class="platform">
+        <div class="container">
+            <h2 class="section-title">The <span class="highlight">Material Intelligence</span> AI Stack</h2>
+            <p class="section-sub">Four AI layers that transform product design from synthetic to sustainable.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon-wrapper"><i class="fas fa-search"></i></div>
+                    <h4>AI Material Matching Engine</h4>
+                    <p>Deep learning analyzes your product's mechanical, thermal, and chemical requirements — matching them against 12,000+ bio-composite materials with 94% accuracy.</p>
+                    <span class="tag">AI Matching • 94%</span>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-wrapper"><i class="fas fa-recycle"></i></div>
+                    <h4>Lifecycle Assessment Tracker</h4>
+                    <p>Full ISO 14040/44-compliant LCA tracking from raw material extraction to end-of-life — quantifying carbon footprint, water use, and circularity for every material choice.</p>
+                    <span class="tag">LCA • ISO Compliant</span>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-wrapper"><i class="fas fa-truck"></i></div>
+                    <h4>Verified Supplier Network</h4>
+                    <p>Direct connection to vetted suppliers of agricultural waste fibers and plant-based composites — with real-time availability, pricing, and sustainability certifications.</p>
+                    <span class="tag">Supplier Network</span>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-wrapper"><i class="fas fa-chart-line"></i></div>
+                    <h4>Performance Prediction</h4>
+                    <p>Machine learning predicts tensile strength, heat resistance, and durability of bio-composites under real-world conditions — before you commit to a material change.</p>
+                    <span class="tag">Predictive AI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MATERIAL MATCHING SIMULATOR ===== -->
+    <section class="matcher">
+        <div class="container">
+            <div class="matcher-main">
+                <div class="matcher-header">
+                    <span class="status-text"><i class="fas fa-circle" style="color:#22c55e;"></i> LIVE — CelluTech Material Matcher</span>
+                    <span style="color:#64748b;">AI Confidence: 94.2%</span>
+                </div>
+                <div class="search-panel">
+                    <div class="search-label">Analyze Your Current Product</div>
+                    <div class="search-input">
+                        <input type="text" id="productSearch" placeholder="Enter material or product (e.g., polypropylene, ABS plastic, foam packaging)" value="Polypropylene packaging film" />
+                        <button id="searchBtn"><i class="fas fa-search"></i> Match</button>
+                    </div>
+                    <div class="material-suggestions">
+                        <span class="suggestion" data-material="polypropylene">Polypropylene</span>
+                        <span class="suggestion" data-material="polyethylene">Polyethylene</span>
+                        <span class="suggestion" data-material="abs">ABS Plastic</span>
+                        <span class="suggestion" data-material="foam">Foam Packaging</span>
+                        <span class="suggestion" data-material="pvc">PVC</span>
+                    </div>
+                </div>
+                <div class="results-panel">
+                    <div class="results-header">
+                        <span>🌿 Top Bio-Composite Matches</span>
+                        <span id="resultsCount">5 results</span>
+                    </div>
+                    <div id="resultsList">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="matcher-sidebar">
+                <h4><i class="fas fa-chart-bar" style="color:#15803d;"></i> Sustainability Metrics</h4>
+                <div class="metric-item"><span>♻️ Recyclability</span><span class="value good" id="recyclability">High</span></div>
+                <div class="metric-item"><span>🌍 Carbon Footprint</span><span class="value good" id="carbonFootprint">-64%</span></div>
+                <div class="metric-item"><span>💧 Water Usage</span><span class="value good" id="waterUsage">-48%</span></div>
+                <div class="metric-item"><span>⏳ Biodegradation</span><span class="value good" id="biodegradation">90 days</span></div>
+                <div style="margin-top:12px;">
+                    <h4><i class="fas fa-seedling" style="color:#15803d;"></i> Sourcing Origins</h4>
+                    <div id="sourceList">
+                        <div class="source-item">
+                            <span class="source-icon"><i class="fas fa-wheat"></i></span>
+                            <div><strong>Hemp Fiber</strong><br /><span style="font-size:0.8rem;">Alberta, Canada</span></div>
+                        </div>
+                        <div class="source-item">
+                            <span class="source-icon"><i class="fas fa-leaf"></i></span>
+                            <div><strong>Flax Fiber</strong><br /><span style="font-size:0.8rem;">Normandy, France</span></div>
+                        </div>
+                        <div class="source-item">
+                            <span class="source-icon"><i class="fas fa-seedling"></i></span>
+                            <div><strong>Rice Husk</strong><br /><span style="font-size:0.8rem;">Punjab, India</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sustainability-bar">
+                    <div class="bar-label">
+                        <span>Sustainability Score</span>
+                        <span id="sustainabilityLabel">78%</span>
+                    </div>
+                    <div class="bar-track"><div class="fill" id="sustainabilityFill" style="width:78%;"></div></div>
+                    <div style="font-size:0.7rem; color:#94a3b8; margin-top:4px;">
+                        <i class="fas fa-info-circle"></i> Based on full lifecycle assessment
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHY CELLUTECH ===== -->
+    <section id="why" class="why">
+        <div class="container">
+            <h2 class="section-title">The <span class="highlight">Sustainable Materials</span> Impact</h2>
+            <p class="section-sub">Real outcomes from product designers using our platform.</p>
+            <div class="why-grid">
+                <div class="why-item">
+                    <div class="number">12K+</div>
+                    <p>Bio-composite materials in our AI-matched database</p>
+                </div>
+                <div class="why-item">
+                    <div class="number">94%</div>
+                    <p>Material match accuracy for performance requirements</p>
+                </div>
+                <div class="why-item">
+                    <div class="number">64%</div>
+                    <p>Average carbon footprint reduction after switching</p>
+                </div>
+                <div class="why-item">
+                    <div class="number">8.4K</div>
+                    <p>Products redesigned with sustainable alternatives</p>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:30px; background:#dcfce7; padding:24px; border-radius:20px; border:1px solid rgba(21,128,61,0.08);">
+                <p style="font-size:1.1rem; font-weight:500; color:#15803d;"><i class="fas fa-leaf"></i> "Every synthetic material replaced with a bio-composite is a step toward a circular economy."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHO WE SERVE ===== -->
+    <section id="serve" class="serve">
+        <div class="container">
+            <h2 class="section-title">Built for <span class="highlight">Sustainable Design</span></h2>
+            <p class="section-sub">CelluTech empowers every stakeholder in the sustainable materials value chain.</p>
+            <div class="serve-grid">
+                <div class="serve-card">
+                    <i class="fas fa-pencil-ruler"></i>
+                    <h4>Product Designers</h4>
+                    <p>Find bio-composite alternatives that meet your performance specs — without compromising on design.</p>
+                </div>
+                <div class="serve-card">
+                    <i class="fas fa-industry"></i>
+                    <h4>Manufacturers</h4>
+                    <p>Source sustainable materials at scale with verified suppliers and lifecycle data for ESG reporting.</p>
+                </div>
+                <div class="serve-card">
+                    <i class="fas fa-leaf"></i>
+                    <h4>Sustainable Brands</h4>
+                    <p>Meet consumer demand for eco-friendly products with materials backed by real sustainability data.</p>
+                </div>
+                <div class="serve-card">
+                    <i class="fas fa-flask"></i>
+                    <h4>Material Scientists</h4>
+                    <p>Discover new bio-composite formulations and collaborate on next-generation sustainable materials.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What <span class="highlight">Innovators</span> Say</h2>
+            <p class="section-sub">Trusted by product designers and manufacturers worldwide.</p>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">“CelluTech matched our polypropylene packaging with a hemp-fiber composite that performed 98% as well and cut our carbon footprint by 67%. The supplier was vetted and ready to scale.”</p>
+                    <p class="author">— Dr. Sarah Chen</p>
+                    <p class="role">Head of Sustainability, IKEA</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">“We redesigned 40 product lines using CelluTech's AI matching. The lifecycle tracker gave us the data we needed for ESG reporting — and our customers love the story.”</p>
+                    <p class="author">— Marcus Johnson</p>
+                    <p class="role">VP of Product, Patagonia</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">“The performance prediction is incredibly accurate. We tested 5 bio-composites recommended by the AI — all 5 met our specs. That's never happened with manual sourcing.”</p>
+                    <p class="author">— Dr. Elena Rodriguez</p>
+                    <p class="role">Material Science Lead, Unilever</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TEAM ===== -->
+    <section id="team" class="team">
+        <div class="container">
+            <h2 class="section-title">The <span class="highlight">Sustainable Materials</span> Team</h2>
+            <p class="section-sub">Material scientists, AI researchers, and sustainability experts united to end synthetic dependence.</p>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/women/72.jpg" alt="Dr. Aisha Patel" class="avatar-img" />
+                    <h4>Dr. Aisha Patel</h4>
+                    <p class="title">CEO & Co-Founder</p>
+                    <p class="bio">Material scientist with 15+ years in bio-composites. Former NASA materials researcher.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Dr. Michael Chen" class="avatar-img" />
+                    <h4>Dr. Michael Chen</h4>
+                    <p class="title">CTO & Co-Founder</p>
+                    <p class="bio">AI/ML Ph.D. specializing in materials informatics and lifecycle optimization.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dr. Lisa Okafor" class="avatar-img" />
+                    <h4>Dr. Lisa Okafor</h4>
+                    <p class="title">Head of Lifecycle Science</p>
+                    <p class="bio">LCA expert. Built the ISO-compliant lifecycle tracking engine behind CelluTech.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="David Kim" class="avatar-img" />
+                    <h4>David Kim</h4>
+                    <p class="title">VP of Product</p>
+                    <p class="bio">Product leader with deep experience in materials sourcing and supply chain platforms.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Ready to <span class="highlight">Switch</span> to Bio-Composites?</h2>
+            <p class="section-sub">Tell us about your product, and we'll show you how CelluTech can help.</p>
+            <div class="contact-wrap">
+                <form class="contact-form" id="contactForm">
+                    <input type="text" placeholder="Full Name" required />
+                    <input type="text" placeholder="Company Name" required />
+                    <input type="email" placeholder="Work Email" required />
+                    <input type="tel" placeholder="Phone Number" />
+                    <select>
+                        <option value="">Select your primary role</option>
+                        <option>Product Designer</option>
+                        <option>Manufacturer</option>
+                        <option>Sustainable Brand</option>
+                        <option>Material Scientist</option>
+                        <option>Sustainability / ESG Lead</option>
+                    </select>
+                    <input type="text" placeholder="Current synthetic material you're replacing" />
+                    <textarea placeholder="Describe your material requirements (performance, cost, sustainability targets, etc.)"></textarea>
+                    <button type="submit" class="btn-primary" style="width:100%;"><i class="fas fa-leaf"></i> Request a Demo</button>
+                </form>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> info@cellutech.ai</p>
+                    <p><i class="fas fa-phone-alt"></i> +1 (888) 555-BIO (246) – 24/7 support</p>
+                    <p><i class="fas fa-map-pin"></i> 440 Green Way, Suite 300, Portland, OR 97201</p>
+                    <div class="emergency-box">
+                        <h4><i class="fas fa-seedling"></i> Custom Material Sourcing</h4>
+                        <p>Need a bio-composite tailored to a specific application? Our material scientists can source or design a custom formulation that meets your exact specs.</p>
+                        <p style="color:#15803d; font-weight:600;">+1 (888) 555-BIO (246) ext. 911</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== GET STARTED ===== -->
+    <section id="getstarted" class="get-started">
+        <div class="container">
+            <h2>Start <span class="highlight">Designing</span> with Bio-Composites</h2>
+            <p>Deploy CelluTech in your product development workflow in days. Start matching, sourcing, and tracking.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="num">1</div>
+                    <h4>Submit</h4>
+                    <p>Describe your current product, materials, and performance requirements.</p>
+                </div>
+                <div class="step">
+                    <div class="num">2</div>
+                    <h4>Match</h4>
+                    <p>Our AI analyzes your specs and matches you with bio-composite alternatives.</p>
+                </div>
+                <div class="step">
+                    <div class="num">3</div>
+                    <h4>Source</h4>
+                    <p>Connect with verified suppliers and track the lifecycle impact of your choice.</p>
+                </div>
+            </div>
+            <a href="#contact" class="btn-primary" style="background:linear-gradient(135deg, #4ade80, #15803d); box-shadow: 0 8px 30px rgba(21,128,61,0.4);"><i class="fas fa-rocket"></i> Start Your Free Trial</a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo" style="color:#fff; font-size:1.6rem;"><span class="cell-icon" style="color:#4ade80;">🌿</span>Cellu<span style="color:#4ade80;">Tech</span></div>
+                    <p style="margin-top:10px; max-width:280px; font-size:0.95rem;">AI-powered bio-composite sourcing and sustainable material lifecycle tracking for product designers.</p>
+                </div>
+                <div>
+                    <h4>Platform</h4>
+                    <a href="#platform">AI Features</a>
+                    <a href="#why">Why CelluTech</a>
+                    <a href="#testimonials">Case Studies</a>
+                    <a href="#contact">Support</a>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">ISO Compliance</a>
+                    <a href="#">Industry Standards</a>
+                </div>
+                <div>
+                    <h4>Connect</h4>
+                    <div class="social">
+                        <i class="fab fa-linkedin"></i>
+                        <i class="fab fa-youtube"></i>
+                        <i class="fab fa-x-twitter"></i>
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <p style="margin-top:12px; font-size:0.85rem;">📬 info@cellutech.ai</p>
+                    <p style="font-size:0.85rem;">📞 +1 (888) 555-BIO</p>
+                </div>
+            </div>
+            <div class="bottom">
+                <span>&copy; 2026 CelluTech. All rights reserved.</span>
+                <span><i class="fas fa-leaf" style="color:#4ade80;"></i> AI for sustainable materials</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // Hamburger toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // ===== MATERIAL MATCHING SIMULATOR =====
+        const resultsList = document.getElementById('resultsList');
+        const resultsCount = document.getElementById('resultsCount');
+        const productSearch = document.getElementById('productSearch');
+        const searchBtn = document.getElementById('searchBtn');
+
+        const materialDatabase = {
+            polypropylene: [
+                { name: 'Hemp Fiber Reinforced PP', sub: 'Hemp/PP composite', match: 94, cost: 'Medium' },
+                { name: 'Flax Fiber Polypropylene', sub: 'Flax/PP composite', match: 91, cost: 'Medium' },
+                { name: 'Rice Husk Filled PP', sub: 'Rice husk/PP composite', match: 88, cost: 'Low' },
+                { name: 'PLA Blend with PP', sub: 'PLA/PP hybrid', match: 85, cost: 'High' },
+                { name: 'Cellulose Acetate PP', sub: 'CA/PP blend', match: 82, cost: 'High' },
+            ],
+            polyethylene: [
+                { name: 'Biopolyethylene (Bio-PE)', sub: 'Sugarcane-derived PE', match: 96, cost: 'Medium' },
+                { name: 'Starch-PE Composite', sub: 'Starch/PE blend', match: 92, cost: 'Low' },
+                { name: 'Hemp Fiber HDPE', sub: 'Hemp/HDPE composite', match: 89, cost: 'Medium' },
+                { name: 'PLA-PE Hybrid', sub: 'PLA/PE blend', match: 84, cost: 'High' },
+                { name: 'Cellulose-PE Composite', sub: 'Cellulose/PE blend', match: 81, cost: 'Medium' },
+            ],
+            abs: [
+                { name: 'PLA-ABS Hybrid', sub: 'PLA/ABS blend', match: 93, cost: 'Medium' },
+                { name: 'Hemp-ABS Composite', sub: 'Hemp/ABS composite', match: 90, cost: 'Medium' },
+                { name: 'Flax-ABS Composite', sub: 'Flax/ABS composite', match: 87, cost: 'Medium' },
+                { name: 'Bio-ABS from Waste', sub: 'Recycled bio-ABS', match: 84, cost: 'Low' },
+                { name: 'Cellulose-ABS Composite', sub: 'Cellulose/ABS blend', match: 80, cost: 'Medium' },
+            ],
+            foam: [
+                { name: 'Mushroom Mycelium Foam', sub: 'Mycelium composite', match: 95, cost: 'Medium' },
+                { name: 'Starch-Based Foam', sub: 'Starch foam', match: 92, cost: 'Low' },
+                { name: 'PLA Foam', sub: 'PLA foam', match: 89, cost: 'High' },
+                { name: 'Cellulose Foam', sub: 'Cellulose foam', match: 86, cost: 'Medium' },
+                { name: 'Rice Husk Foam', sub: 'Rice husk foam', match: 82, cost: 'Low' },
+            ],
+            pvc: [
+                { name: 'Bio-PVC from Plant', sub: 'Plant-derived PVC', match: 94, cost: 'High' },
+                { name: 'Hemp-PVC Composite', sub: 'Hemp/PVC composite', match: 90, cost: 'Medium' },
+                { name: 'Flax-PVC Composite', sub: 'Flax/PVC composite', match: 87, cost: 'Medium' },
+                { name: 'Cellulose-PVC Blend', sub: 'Cellulose/PVC blend', match: 83, cost: 'Medium' },
+                { name: 'Recycled PVC', sub: 'Recycled PVC', match: 80, cost: 'Low' },
+            ],
+        };
+
+        function renderResults(materialKey) {
+            const data = materialDatabase[materialKey] || materialDatabase.polypropylene;
+            let html = '';
+            data.forEach((item, index) => {
+                const matchClass = item.match >= 90 ? 'high' : item.match >= 85 ? 'medium' : 'low';
+                html += `
+                    <div class="result-item">
+                        <div class="result-name">
+                            ${item.name}
+                            <span class="result-sub">${item.sub}</span>
+                        </div>
+                        <div class="result-match">
+                            ${item.match}%
+                            <span class="match-bar"><span class="fill" style="width:${item.match}%;"></span></span>
+                        </div>
+                        <div class="result-cost">${item.cost} Cost</div>
+                        <div class="result-action">
+                            <button class="btn-sm" onclick="alert('📋 Material: ${item.name}\\nMatch Score: ${item.match}%\\nCost Index: ${item.cost}\\n\\nThis bio-composite meets your performance requirements.')">View</button>
+                        </div>
+                    </div>
+                `;
+            });
+            resultsList.innerHTML = html;
+            resultsCount.textContent = `${data.length} results`;
+        }
+
+        // Search button
+        searchBtn.addEventListener('click', () => {
+            const query = productSearch.value.toLowerCase();
+            let key = 'polypropylene';
+            if (query.includes('polyethylene') || query.includes('pe')) key = 'polyethylene';
+            else if (query.includes('abs')) key = 'abs';
+            else if (query.includes('foam')) key = 'foam';
+            else if (query.includes('pvc')) key = 'pvc';
+            else if (query.includes('polypropylene') || query.includes('pp')) key = 'polypropylene';
+
+            // Animate search
+            resultsList.innerHTML = '<div style="padding:20px; text-align:center; color:#94a3b8;"><i class="fas fa-spinner fa-spin"></i> AI matching in progress...</div>';
+            setTimeout(() => {
+                renderResults(key);
+                // Update metrics
+                updateMetrics();
+            }, 800);
+        });
+
+        // Suggestion buttons
+        document.querySelectorAll('.suggestion').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const material = this.dataset.material;
+                productSearch.value = this.textContent;
+                searchBtn.click();
+            });
+        });
+
+        function updateMetrics() {
+            const recyclability = document.getElementById('recyclability');
+            const carbonFootprint = document.getElementById('carbonFootprint');
+            const waterUsage = document.getElementById('waterUsage');
+            const biodegradation = document.getElementById('biodegradation');
+
+            if (recyclability) recyclability.textContent = ['High', 'Moderate', 'Excellent'][Math.floor(Math.random() * 3)];
+            if (carbonFootprint) carbonFootprint.textContent = `-${Math.floor(55 + Math.random() * 20)}%`;
+            if (waterUsage) waterUsage.textContent = `-${Math.floor(40 + Math.random() * 20)}%`;
+            if (biodegradation) biodegradation.textContent = `${Math.floor(60 + Math.random() * 60)} days`;
+        }
+
+        // Initialize
+        renderResults('polypropylene');
+
+        // Update sustainability bar
+        setInterval(() => {
+            const sustainabilityFill = document.getElementById('sustainabilityFill');
+            const sustainabilityLabel = document.getElementById('sustainabilityLabel');
+            if (sustainabilityFill) {
+                const score = Math.floor(72 + Math.random() * 22);
+                sustainabilityFill.style.width = `${score}%`;
+                sustainabilityLabel.textContent = `${score}%`;
+            }
+        }, 5000);
+
+        // Contact form
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✅ Your demo request has been received! A CelluTech specialist will contact you within 2 hours.');
+            this.reset();
+        });
+    </script>
+
+</body>
+</html>
